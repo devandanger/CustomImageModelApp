@@ -20,11 +20,16 @@ struct ContentView: View {
                 
                 HStack {
                     Spacer()
-                    Button("Detect Faces") {
-                        viewModel.detectFaces()
+                    Button("Run model request") {
+                        viewModel.runInference()
                     }
                     .padding()
                     Spacer()
+                }
+                if let identifier = viewModel.identifier {
+                    Text("Model request complete: \(identifier)")
+                        .foregroundColor(.green)
+                        .padding()
                 }
                 if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
