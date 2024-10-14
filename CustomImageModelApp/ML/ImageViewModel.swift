@@ -26,7 +26,7 @@ class ImageViewModel: ObservableObject {
   init(photoPickerViewModel: PhotoPickerViewModel) {
       self.photoPickerViewModel = photoPickerViewModel
       let config = MLModelConfiguration()
-      let coreMLModel = try! CatsVsDog_v1(configuration: config)
+      let coreMLModel = try! DogBreeds_SlimLabels(configuration: config)
       mlModel = try! VNCoreMLModel(for: coreMLModel.model)
   }
   
