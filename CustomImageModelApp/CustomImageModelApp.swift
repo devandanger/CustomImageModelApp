@@ -14,19 +14,7 @@ struct CustomImageModelApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ContentView(viewModel: .init(photoPickerViewModel: photoPickerViewModel))
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            PhotosPicker(
-                                selection: $photoPickerViewModel.imageSelection,
-                                matching: .images,
-                                photoLibrary: .shared()
-                            ) {
-                                Image(systemName: "photo.on.rectangle.angled")
-                                    .imageScale(.large)
-                            }
-                        }
-                    }
+                ContentView()
             }
         }
     }

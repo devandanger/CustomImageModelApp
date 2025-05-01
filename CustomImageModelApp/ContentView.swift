@@ -10,6 +10,12 @@ import PhotosUI
 
 struct ContentView: View {
   @StateObject var viewModel: ImageViewModel
+    @State var showCamera: Bool = false
+    
+    init() {
+        _viewModel = StateObject(wrappedValue:
+                                    ImageViewModel(photoPickerViewModel: PhotoPickerViewModel()))
+    }
   
     var body: some View {
         VStack {
@@ -36,15 +42,49 @@ struct ContentView: View {
                         .foregroundColor(.red)
                         .padding()
                 }
+                
             } else {
                 Text("No image available")
             }
+            Spacer()
+            HStack {
+                PhotosPicker(
+                    selection: $viewModel.photoPickerViewModel.imageSelection,
+                    matching: .images,
+                    photoLibrary: .shared()
+                ) {
+                    HStack {
+                        Image(systemName: "photo.on.rectangle.angled")
+                            .imageScale(.large)
+                        Text("From Library")
+                    }
+                }
+                Button {
+                    showCamera = true
+                } label: {
+                    HStack {
+                        Image(systemName: "camera")
+                            .imageScale(.large)
+                        Text("From Camera")
+                    }
+                }
+                .sheet(isPresented: $showCamera) {
+                    CameraPickerView { image in
+                        viewModel.photoPickerViewModel.selectedPhoto = Photo(image: image)
+                        print("Receive image")
+                    }
+                }
+            }
         }
+        .onChange(of: viewModel.photoPickerViewModel.selectedPhoto) { _, newValue in
+            print("Received new value")
+        }
+        
     }
 }
 
 #Preview {
     NavigationView {
-        ContentView(viewModel: .init(photoPickerViewModel: PhotoPickerViewModel()))
+        ContentView()
     }
 }
