@@ -9,12 +9,14 @@ import SwiftUI
 import PhotosUI
 
 struct ContentView: View {
+    @EnvironmentObject var visionProcess: VisionProcessing
   @StateObject var viewModel: ImageViewModel
     @State var showCamera: Bool = false
     
     init() {
         _viewModel = StateObject(wrappedValue:
                                     ImageViewModel(photoPickerViewModel: PhotoPickerViewModel()))
+        
     }
   
     var body: some View {
@@ -70,6 +72,7 @@ struct ContentView: View {
                 }
                 .sheet(isPresented: $showCamera) {
                     CameraPickerView { image in
+                        viewModel.photoPickerViewModel.imageSelection = nil
                         viewModel.photoPickerViewModel.selectedPhoto = Photo(image: image)
                         print("Receive image")
                     }
@@ -78,6 +81,28 @@ struct ContentView: View {
         }
         .onChange(of: viewModel.photoPickerViewModel.selectedPhoto) { _, newValue in
             print("Received new value")
+            if let image = newValue?.image {
+                visionProcess.extract(from: image) { _ in
+                
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    VStack {
+                        ForEach(visionProcess
+                            .results
+                            .compactMap { text in text.topCandidates(1).first?.string }, id: \.self) { result in
+                            Text(result)
+                        }
+                    }
+                } label: {
+                    Text("Results")
+                }
+
+            }
+            
         }
         
     }

@@ -15,6 +15,7 @@ struct CustomImageModelApp: App {
         WindowGroup {
             NavigationView {
                 ContentView()
+                    .environmentObject(VisionProcessing())
             }
         }
     }
