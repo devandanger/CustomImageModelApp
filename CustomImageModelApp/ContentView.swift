@@ -10,6 +10,7 @@ import PhotosUI
 
 struct ContentView: View {
     @EnvironmentObject var visionProcess: VisionProcessing
+    @EnvironmentObject var openAIProcess: OpenAIProvider
   @StateObject var viewModel: ImageViewModel
     @State var showCamera: Bool = false
     
@@ -87,12 +88,13 @@ struct ContentView: View {
                 }
             }
         }
-        .onChange(of: visionProcess.results, { oldValue, newValue in
+        .onChange(of: visionProcess.results) { oldValue, newValue in
             print("Received vision result")
-            sendPromptToOpenAI(prompt: "Hello World") { <#String?#> in
-                <#code#>
-            }
-        })
+            self.openAIProcess.callWithResult(
+                newValue.compactMap { $0.topCandidates(1).first?.string
+                }.joined(separator: "\n")
+            )
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {

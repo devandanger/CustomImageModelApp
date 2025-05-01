@@ -12,9 +12,11 @@ class OpenAIProvider: ObservableObject {
     @Published var prompt: String = "Hello world"
     @Published var results: String = "Hello world"
     
-    func callWithResult(_ input: String) async throws -> String {
+    func callWithResult(_ input: String) {
         sendPromptToOpenAI(prompt: (prompt + "\n" + input)) { results in
-            self.results = results
+            DispatchQueue.main.async {   
+                self.results = results ?? "No results"
+            }
         }
     }
     

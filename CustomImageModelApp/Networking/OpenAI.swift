@@ -30,7 +30,7 @@ func sendPromptToOpenAI(prompt: String, completion: @escaping (String?) -> Void)
     
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
-    request.addValue("Bearer YOUR_API_KEY", forHTTPHeaderField: "Authorization")
+    request.addValue("Bearer ADD ME", forHTTPHeaderField: "Authorization")
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
     let body = OpenAIRequest(

@@ -16,6 +16,7 @@ struct CustomImageModelApp: App {
             NavigationView {
                 ContentView()
                     .environmentObject(VisionProcessing())
+                    .environmentObject(OpenAIProvider())
             }
         }
     }
