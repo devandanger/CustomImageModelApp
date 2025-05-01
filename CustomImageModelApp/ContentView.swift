@@ -87,6 +87,12 @@ struct ContentView: View {
                 }
             }
         }
+        .onChange(of: visionProcess.results, { oldValue, newValue in
+            print("Received vision result")
+            sendPromptToOpenAI(prompt: "Hello World") { <#String?#> in
+                <#code#>
+            }
+        })
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
